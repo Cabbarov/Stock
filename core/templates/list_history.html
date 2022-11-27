@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+{% block content%}
+<div class="container" >
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if messages.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="jumbotron m-3 p-2" style="background-color: #b7c3d1;">
+        <h1 style="text-align: center;">{{header}}</h1>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>COUNT</th>
+                    <th>USER</th>
+                    <th>CATEGORY</th>
+                    <th>ITEM NAME</th>
+                    <th>QUANTITY IN STORE</th>
+                    <th>RECEIVE QUANTITY</th>
+                    <th>RECEIVE BY</th>
+                    <th>ISSUE QUANTITY</th>
+                    <th>ISSUE TO</th>
+                    <th>DELETE BY</th>
+                    <th>TIMESTAMP</th>
+                    <th>LAST UPDATED</th>
+                    
+                </tr>
+            </thead>
+            {% for instance in queryset %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{instance.username}}</td>
+                <td>{{instance.category}}</td>
+                <td>{{instance.item_name}}</td>
+                <td>{{instance.quantity}}</td>
+                <td>{{instance.receive_quantity}}</td>
+                <td>{{instance.receive_by}}</td>
+                <td>{{instance.issue_quantity}}</td>
+                <td>{{instance.issue_to}}</td>
+                <td>{{instance.user}}</td>
+                <td>{{instance.timestamp}}</td>
+                <td>{{instance.last_updated}}</td>
+                
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

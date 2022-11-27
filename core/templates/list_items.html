@@ -1,0 +1,91 @@
+{% extends 'index.html' %}
+{% load static crispy_forms_tags %}
+{% block header %}
+<style>
+.table{
+    font-size: 13px;
+    text-align: center;
+    width: 95%;
+    margin: auto;
+    text-align: center;
+}
+
+.table tr:nth-child(odd){
+    background: #BBCAE4;
+}
+.table tr:nth-child(even){
+    background: #dae5f4;
+}
+
+thead tr{
+    background-color: #337ab7 !important;
+    color: white;
+}
+
+.success{
+    list-style: none;
+    background-color: #2e6da4;
+    color: white;
+    box-shadow: 12px 12px 12px #e61c66;
+    text-align: center;
+}
+</style>
+{% endblock %}
+{% block content %} 
+    
+<div class="container" >
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if messages.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="jumbotron m-3 p-2" style="background-color: #b7c3d1;">
+        <h1 style="text-align: center;">{{title}}</h1>
+        <div class="p-2">
+            <form action="" method="POST">
+               {% csrf_token %}
+               {{form|crispy}}
+               <input type="submit" value="search">
+            </form>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>COUNT</th>
+                    <th>CATEGORY</th>
+                    <th>ITEM NAME</th>
+                    <th>QUANTITY IN STORE</th>
+                    <th>REORDER LEVEL</th>
+                    <th>TIMESTAMP</th>
+                    <th>LAST UPDATED</th>
+                    <th>DELETE</th>
+                </tr>
+            </thead>
+            {% for instance in queryset %}
+            <tr>
+                
+                <td>{{forloop.counter}}</td>
+                <td>{{instance.category}}</td>
+                <td><a href="{% url 'update_items' instance.id %}">{{instance.item_name}}</a></td>
+                <td>
+                    {% if instance.quantity <= instance.reorder_level %}
+                    <div style="background-color: orange;">
+                        <a href="{% url 'stock_detail' instance.id %}">{{instance.quantity}}</a>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'stock_detail' instance.id %}">{{instance.quantity}}</a>
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'reorder_level' instance.id %}">{{instance.reorder_level}}</a></td>
+                <td>{{instance.timestamp}}</td>
+                <td>{{instance.last_updated}}</td>
+                <td><a href="{% url 'delete_items' instance.id %}"><i class="fa-sharp fa-solid fa-trash" style="color:red"></i></a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}
