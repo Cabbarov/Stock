@@ -1,31 +1,180 @@
-<nav class="navbar navbar-expand-lg bg-light">
+<style>
+ 
+a{
+    text-decoration: none;
+}
+ul, ol{
+    list-style: none;
+}
+
+.app_nav-links{
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+}
+ 
+.app_nav-links p{
+  margin: 0 auto;
+}
+
+.app_nav-link{
+   
+    color: #eaeaea;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
+}
+.app_nav-link:hover{
+    cursor: pointer;
+   
+}
+.app_dropdown{
+    position: relative;
+    display: none;
+}
+.app_dropdown_list{
+    color: black;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 200px;
+    background: white ;
+    border: 1px solid rgb(223, 223, 223);
+    padding: 10px ;
+    
+    left: -15px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+}
+.app_nav-link:hover .app_dropdown{
+    display: block;
+}
+.app_dropdown_list-item{
+    width: 100%;
+    padding: 10px;
+    background: #f7f7f7;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    position: relative;
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
+}
+.app_dropdown_list-item:hover{
+    background: #eaeaea;
+}
+.app_dropdown_list-item-submenu{
+    
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 180px;
+    width: 150px;
+    padding: 10px;
+    background: white ;
+    border: 1px solid rgb(223, 223, 223);
+    flex-direction: column;
+    gap: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+}
+.app_dropdown_list-item:hover .app_dropdown_list-item-submenu{
+    display: flex;
+}
+.app_dropdown_list-item-submenu-item{
+  
+    padding: 10px;
+    background: #f7f7f7;
+    cursor: pointer;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
+}
+.app_dropdown_list-item-submenu-item:hover{
+    background: #eaeaea;
+}
+</style>
+<nav class="navbar navbar-expand-lg bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">INTERNET</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand text-white" href="#">INTERNET</a>
+      <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse " id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{%url 'index'%}">Home</a>
+                <a class="nav-link active text-white" aria-current="page" href="{%url 'index'%}">Ana səhifə</a>
               </li>
             {% if request.user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{%url 'list_items'%}">List_items</a>
+                <a class="nav-link text-light" href="{%url 'list_items'%}">Avadanlıqların siyahısı</a>
             </li>
-            <li class="nav-item">
+            <ul class="app_nav-links ">
+              <li class="app_nav-link">
+                <p class="app_dropdown_title">Kateqoriya</p>
+                <div class="app_dropdown">
+                  <ul class="app_dropdown_list">
+                    {% for category in categories%}
+                    <li class="app_dropdown_list-item">
+                      <p class="app_dropdown_list-item-title">{{category.name}}</p>
+                      <ul class="app_dropdown_list-item-submenu">
+                        {% for subcategory in category.children.all %}
+                        <li class="app_dropdown_list-item-submenu-item"><a href="{% url 'category_detail' subcategory.id %}">{{ subcategory.name }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </li>
+                    {% endfor %}
+                    <li style="text-align: center;">
+                      <a href="{% url 'add_category' %}"><button type="button" class="btn btn-primary " style="width: 100px;">Əlavə et</button></a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+           
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="{%url 'add_items'%}">Add_items</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{%url 'list_history'%}">List_history</a>
-            </li>
+            </li> -->
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="{%url 'categories'%}">Categories</a>
+            </li> -->
             {% endif %}
         </ul>
         <ul class="navbar-nav">
           {% if request.user.is_authenticated %}
-          <li><a href="/logout"><button class="btn btn-danger">{{ user }} | Logout</button></a></li>
+          <li><a href="/logout"><button class="btn btn-danger">{{ user }} | Çıxış</button></a></li>
           {% else %}
-          <li><a href="/login">Login</a></li>
+          <li><a href="/login"> <button class="btn btn-danger"> Daxil ol </button></a></li>
           {% endif %}
         </ul>
       </div>

@@ -1,0 +1,45 @@
+.table{
+    font-size: 13px;
+    text-align: center;
+    width: 95%;
+    margin: auto;
+    text-align: center;
+}
+
+.table tr:nth-child(odd){
+    background: #BBCAE4;
+}
+.table tr:nth-child(even){
+    background: #dae5f4;
+}
+
+th {
+    background-color: #337ab7;
+    color: white;
+}
+
+.aaa {
+    color: red;
+}
+.page-title{
+    color: #0000FF;
+}
+
+.mybutton {
+    width: 100%;
+    margin: 10px 0 10px 0;
+}
+
+#id_item_name{
+    width: 20vh;
+}
+#id_category{
+    width: 20vh;
+}
+
+tr th{
+    background-color: #6495ED !important;
+}
+   
+    
+   

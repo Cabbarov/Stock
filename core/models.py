@@ -14,27 +14,27 @@ category_choice = {
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
+    parent_cat = models.ForeignKey('self', on_delete=models.CASCADE,
+                db_index=True, related_name='children', null=True, blank=True)
+    name = models.CharField(max_length=50)
+
     def __str__(self):
+        if self.parent_cat:
+            return f'{self.parent_cat}>{self.name}'
         return self.name
 
 
 class Stock(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
                                 db_index=True, related_name='stocks', blank=True, null=True)
-    category = models.CharField(max_length=50, blank=True, null=True)
     item_name = models.CharField(max_length=50, blank=True, null=True)
-    quantity = models.IntegerField(default=0, blank=True, null=True)
-    recieve_quantity = models.IntegerField(default=0, blank=True, null=True)
-    recieve_by = models.CharField(max_length=50, blank=True, null=True)
-    issue_quantity = models.IntegerField(default=0, blank=True, null=True)
-    issue_by = models.CharField(max_length=50, blank=True, null=True)
-    issue_to = models.CharField(max_length=50, blank=True, null=True)
-    receive_by = models.CharField(max_length=50, blank=True, null=True)
-    receive_quantity = models.IntegerField(default=0, blank=True, null=True)
+    quantity = models.PositiveIntegerField(default=0, blank=True, null=True)
+    receive_quantity = models.PositiveIntegerField(default=0, blank=True, null=True)
+    issue_quantity = models.PositiveIntegerField(default=0, blank=True, null=True)
+    description = models.CharField(max_length=50, blank=True, null=True)
 
     created_by = models.CharField(max_length=50, blank=True, null=True)
-    reorder_level = models.IntegerField(default=0, blank=True, null=True)
+    reorder_level = models.PositiveIntegerField(default=0, blank=True, null=True)
     last_updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     # date = models.DateTimeField(auto_now_add=False, auto_now=False)
@@ -45,16 +45,14 @@ class Stock(models.Model):
 class StockHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                                 db_index=True, related_name='histories', blank=True, null=True)
-    category = models.CharField(max_length=50, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,
+                                db_index=True, related_name='histories', blank=True, null=True)
     item_name = models.CharField(max_length=50, blank=True, null=True)
-    quantity = models.IntegerField(default=0, blank=True, null=True)
-    recieve_quantity = models.IntegerField(default=0, blank=True, null=True)
-    recieve_by = models.CharField(max_length=50, blank=True, null=True)
-    issue_quantity = models.IntegerField(default=0, blank=True, null=True)
-    issue_by = models.CharField(max_length=50, blank=True, null=True)
-    issue_to = models.CharField(max_length=50, blank=True, null=True)
-    receive_by = models.CharField(max_length=50, blank=True, null=True)
-    receive_quantity = models.IntegerField(default=0, blank=True, null=True)
+    quantity = models.PositiveIntegerField(default=0, blank=True, null=True)
+    receive_quantity = models.PositiveIntegerField(default=0, blank=True, null=True)
+    issue_quantity = models.PositiveIntegerField(default=0, blank=True, null=True)
+    description = models.CharField(max_length=50, blank=True, null=True)
+   
 
     # user = models.CharField
     created_by = models.CharField(max_length=50, blank=True, null=True)

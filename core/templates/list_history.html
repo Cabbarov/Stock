@@ -1,6 +1,15 @@
 {% extends 'index.html' %}
+{% load static crispy_forms_tags %}
+{% block header %}
+<link rel="stylesheet" href="{% static 'jquery-ui-1.13.2/jquery-ui.min.css' %}">
+<link rel="stylesheet" href="{% static 'jquery-ui-1.13.2/jquery-ui.structure.min.css' %}">
+<link rel="stylesheet" href="{% static 'jquery-ui-1.13.2/jquery-ui.theme.min.css' %}">
+<script src="{% static 'jquery-3.6.1.min.js' %}"></script>
+<script src="{% static 'jquery-ui-1.13.2/jquery-ui.min.js' %}"></script>
+<script src="{% static 'script.js' %}"></script>
+{% endblock %}
 {% block content%}
-<div class="container" >
+<div class="container-fluid"  >
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -8,45 +17,72 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <div class="jumbotron m-3 p-2" style="background-color: #b7c3d1;">
-        <h1 style="text-align: center;">{{header}}</h1>
-        
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>COUNT</th>
-                    <th>USER</th>
-                    <th>CATEGORY</th>
-                    <th>ITEM NAME</th>
-                    <th>QUANTITY IN STORE</th>
-                    <th>RECEIVE QUANTITY</th>
-                    <th>RECEIVE BY</th>
-                    <th>ISSUE QUANTITY</th>
-                    <th>ISSUE TO</th>
-                    <th>DELETE BY</th>
-                    <th>TIMESTAMP</th>
-                    <th>LAST UPDATED</th>
-                    
-                </tr>
-            </thead>
-            {% for instance in queryset %}
-            <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{instance.username}}</td>
-                <td>{{instance.category}}</td>
-                <td>{{instance.item_name}}</td>
-                <td>{{instance.quantity}}</td>
-                <td>{{instance.receive_quantity}}</td>
-                <td>{{instance.receive_by}}</td>
-                <td>{{instance.issue_quantity}}</td>
-                <td>{{instance.issue_to}}</td>
-                <td>{{instance.user}}</td>
-                <td>{{instance.timestamp}}</td>
-                <td>{{instance.last_updated}}</td>
+    <div class="jumbotron m-3 p-2" style="background-color: #ccd1d6;min-height: 90vh;" >
+        <h1 style="text-align: center;" class="page-title pt-5">{{header}}</h1>
+        <div class="row">
+
+            <div class="col-sm-2">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input class="btn btn-primary mybutton" type="submit" value="Axtar">
+                </form>
+
+            </div>
+            <div class="col-sm-10">
+                <div class="shadow p-3 m-3   rounded" style="background-color: #b7c3d1;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>SAY</th>
+                            <th>İSTİFADƏÇİ</th>
+                            <th>KATEQORİYA</th>
+                            <th>ALTKATEQORİYA</th>
+                            <th>AVADANLIĞIN ADI</th>
+                            <th>ANBARDAKI SAY</th>
+                            <th>ALIŞ SAYI</th>
+                            <th>VERİŞ SAYI</th>
+                            <th>TƏSVİR</th>
+                            <th>SON DƏYİŞİKLİK TARİXİ</th>
+                            
+                        </tr>
+                    </thead>
+                    {% for instance in page_obj %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{instance.user}}</td>
+                        <td>{{instance.category.parent_cat}}</td>
+                        <td>{{instance.category.name}}</td>
+                        <td>{{instance.item_name}}</td>
+                        <td>{{instance.quantity}}</td>
+                        <td>{{instance.receive_quantity}}</td>
+                        <td>{{instance.issue_quantity}}</td>
+                        <td>{{instance.description}}</td>
+                        <td>{{instance.last_updated}}</td>
+                        
+                    </tr>
+                    {% endfor %}
+                </table>
+                <div class="pagination m-3" >
+                    <span class="step-links m-auto" >
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
                 
-            </tr>
-            {% endfor %}
-        </table>
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

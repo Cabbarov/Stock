@@ -1,0 +1,65 @@
+{% extends 'index.html' %}
+{% load static crispy_forms_tags %}
+{% block header %}
+
+{% endblock %}
+{% block content %} 
+    
+<div class="container" >
+    <h1 class="page-title">{{title}}</h1>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if messages.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="jumbotron m-3 p-2" style="background-color: #b7c3d1;">
+        
+        <h1 style="text-align: center;" class="page-title">Altkateqoriya: {{queryset1.category.name}}</h1>
+        
+        <!-- <div class="p-2">
+            <form action="" method="POST">
+               {% csrf_token %}
+               {{form|crispy}}
+               <input type="submit" value="search">
+            </form>
+        </div> -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>SAY</th>
+                    <th>İSTİFADƏÇİ</th>
+                    <th>KATEQORİYA</th>
+                    <th>AVADANLIĞIN ADI</th>
+                    <th>ANBARDAKI SAY</th>
+                    <!-- <th>REORDER LEVEL</th> -->
+                    <!-- <th>TIMESTAMP</th> -->
+                    <th>ALIŞ SAYI</th>
+                    <th>VERİŞ SAYI</th>
+                    <th>TƏSVİR</th>
+                    <th>SON DƏYİŞİKLİK TARİXİ</th>
+                </tr>
+            </thead>
+            {% for instance in queryset %}
+            <tr>
+                
+                <td>{{forloop.counter}}</td>
+                <td>{{instance.user}}</td>
+                <td>{{instance.category.parent_cat}}</td>
+                <td>{{instance.item_name}}</td>
+                <td>{{instance.quantity}}</td>
+                <!-- <td>{{instance.reorder_level}}</td> -->
+                <!-- <td>{{instance.timestamp}}</td> -->
+                <td>{{instance.receive_quantity}}</td>
+                <td>{{instance.issue_quantity}}</td>
+                <td>{{instance.description}}</td>
+                <td>{{instance.last_updated}}</td>
+               
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

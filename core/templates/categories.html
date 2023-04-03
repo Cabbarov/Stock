@@ -1,0 +1,43 @@
+{% extends 'index.html' %}
+{% block content%}
+<h1 class="page-title">{{title}}</h1>
+{% for category in categories%}
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{category.name}} 
+    </button>
+    <ul class="dropdown-menu">
+        {% for subcategory in category.children.all %}
+      <li><a class="dropdown-item" href="{% url 'category_detail' subcategory.name %}">{{ subcategory }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endfor %}
+
+<a href="{% url 'add_category' %}"><button type="button" class="btn btn-primary">Add</button></a>
+<div class="container">
+    {% for category in categories%}
+    <table class="table">
+        <thead>
+            <tr>
+                {% for category in categories%}
+
+                <th scope="col">{{category.name}} </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for subcategory in category.children.all %}
+            <tr>
+                <td scope="row">{{ subcategory }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+
+
+
+
+{% endblock %}

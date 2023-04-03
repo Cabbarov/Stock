@@ -2,11 +2,19 @@
 {% load static crispy_forms_tags %}
 {% block content %} 
 <div class="container p-5 mt-5" style="background-color: #b7c3d1;">
-
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if messages.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <h1 style="text-align: center;margin-bottom: 50px;" class="page-title">{{title}}</h1>
     <form action="" method="post">
         {% csrf_token %}
         {{form|crispy}}
-        <input type="submit" value="Save"/>
+        <input type="submit" value="Əlavə et" style="background-color: rgb(53, 134, 201);color: white;"/>
+        
     </form>
 </div>
 {% endblock %}

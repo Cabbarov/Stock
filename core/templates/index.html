@@ -6,17 +6,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block header%}
+    
+    {% endblock %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'style.css'%}">
-    {% block header%}
-    {% endblock %}
     <title>Anbar</title>
 </head>
 <body>
     {% include 'include/navbar.html' %}
     {% block content %}
-
+<div class="d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+<img src="/static/img/gerb.jpeg" alt="gerb" style="height: 500px;">
+</div>
     {% endblock %}
 <!-- <div class="container">
     <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">

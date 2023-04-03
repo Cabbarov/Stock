@@ -1,39 +1,12 @@
 {% extends 'index.html' %}
 {% load static crispy_forms_tags %}
 {% block header %}
-<style>
-.table{
-    font-size: 13px;
-    text-align: center;
-    width: 95%;
-    margin: auto;
-    text-align: center;
-}
 
-.table tr:nth-child(odd){
-    background: #BBCAE4;
-}
-.table tr:nth-child(even){
-    background: #dae5f4;
-}
-
-thead tr{
-    background-color: #337ab7 !important;
-    color: white;
-}
-
-.success{
-    list-style: none;
-    background-color: #2e6da4;
-    color: white;
-    box-shadow: 12px 12px 12px #e61c66;
-    text-align: center;
-}
-</style>
 {% endblock %}
 {% block content %} 
     
-<div class="container" >
+<div class="container-fluid" style="height: 100vh;" >
+
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -41,50 +14,65 @@ thead tr{
             {% endfor %}
         </ul>
     {% endif %}
-    <div class="jumbotron m-3 p-2" style="background-color: #b7c3d1;">
-        <h1 style="text-align: center;">{{title}}</h1>
-        <div class="p-2">
-            <form action="" method="POST">
-               {% csrf_token %}
-               {{form|crispy}}
-               <input type="submit" value="search">
-            </form>
-        </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>COUNT</th>
-                    <th>CATEGORY</th>
-                    <th>ITEM NAME</th>
-                    <th>QUANTITY IN STORE</th>
-                    <th>REORDER LEVEL</th>
-                    <th>TIMESTAMP</th>
-                    <th>LAST UPDATED</th>
-                    <th>DELETE</th>
-                </tr>
-            </thead>
-            {% for instance in queryset %}
-            <tr>
-                
-                <td>{{forloop.counter}}</td>
-                <td>{{instance.category}}</td>
-                <td><a href="{% url 'update_items' instance.id %}">{{instance.item_name}}</a></td>
-                <td>
-                    {% if instance.quantity <= instance.reorder_level %}
-                    <div style="background-color: orange;">
-                        <a href="{% url 'stock_detail' instance.id %}">{{instance.quantity}}</a>
+    <div class="jumbotron m-3 p-2" style="background-color:  #ccd1d6;min-height: 90vh;">
+        <h1 style="text-align: center; " class="page-title pt-5">{{title}}</h1>
+        <div class="row">
+
+            <div class="col-sm-2">
+                <div class="p-2">
+                    <form action="" method="POST">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <input class="btn btn-primary mybutton" type="submit" value="Axtar">
+                    </form>
+                    <div class="mt-4">
+
+                        <a href="{%url 'add_items'%}"><div class="btn btn-primary mybutton">Avadanlıq əlavə et</div></a>
+                        <a href="{%url 'list_history'%}"><div class="btn btn-primary mybutton">Tarixçə</div></a>
                     </div>
-                    {% else %}
-                    <a href="{% url 'stock_detail' instance.id %}">{{instance.quantity}}</a>
-                    {% endif %}
-                </td>
-                <td><a href="{% url 'reorder_level' instance.id %}">{{instance.reorder_level}}</a></td>
-                <td>{{instance.timestamp}}</td>
-                <td>{{instance.last_updated}}</td>
-                <td><a href="{% url 'delete_items' instance.id %}"><i class="fa-sharp fa-solid fa-trash" style="color:red"></i></a></td>
-            </tr>
-            {% endfor %}
-        </table>
+                </div>
+            </div>
+            <div class="col-sm-10">
+                <div class="shadow p-3 mb-5  rounded" style="background-color: #b7c3d1;" >
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>SAY</th>
+                                <th>KATEQORİYA</th>
+                                <th>ALTKATEQORİYA</th>
+                                <th>AVADANLIĞIN ADI</th>
+                                <th>ANBARDAKI SAY</th>
+                                <!-- <th>REORDER LEVEL</th> -->
+                                <!-- <th>TIMESTAMP</th> -->
+                                <th>SON DƏYİŞİKLİK TARİXİ</th>
+                                
+                            </tr>
+                        </thead>
+                        {% for instance in queryset %}
+                        <tr>
+                            
+                            <td>{{forloop.counter}}</td>
+                            <td>{{instance.category.parent_cat}}</td>
+                            <td><a href="{% url 'category_detail' instance.category.id %}" style="text-decoration: none;">{{instance.category.name}}</a></td>
+                            <td>{{instance.item_name}}</td>
+                            <td>
+                                {% if instance.quantity <= instance.reorder_level %}
+                                <div style="background-color: orange;">
+                                    <a href="{% url 'stock_detail' instance.id %}" style="text-decoration: none;">{{instance.quantity}}</a>
+                                </div>
+                                {% else %}
+                                <a href="{% url 'stock_detail' instance.id %}" style="text-decoration: none;">{{instance.quantity}}</a>
+                                {% endif %}
+                            </td>
+                            <!-- <td><a href="{% url 'reorder_level' instance.id %}">{{instance.reorder_level}}</a></td> -->
+                            <!-- <td>{{instance.timestamp}}</td> -->
+                            <td>{{instance.last_updated}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
