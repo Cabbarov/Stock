@@ -1,0 +1,6 @@
+.env
+.venv
+pgdb/
+media/
+**/migrations/**
+!**/migartions/__init.py__
