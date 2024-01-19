@@ -4,3 +4,4 @@ pgdb/
 media/
 **/migrations/**
 !**/migartions/__init.py__
+**/__pycache__/**
