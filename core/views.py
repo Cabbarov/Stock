@@ -44,6 +44,7 @@ def list_items(request):
         'queryset' : queryset,
         'categories' : categories,
     }
+    
     if request.method == 'POST':
         queryset = Stock.objects.filter(
                                         item_name__icontains=form['item_name'].value())
@@ -125,9 +126,11 @@ def add_items(request):
 @login_required
 def stock_detail(request, pk):
     queryset = Stock.objects.get(id=pk)
+    categories = Category.objects.filter(parent_cat=None)
     context = {
         'title': queryset.item_name,
         'queryset': queryset,
+        'categories': categories,
     }
     return render(request,'stock_detail.html',context)
 
@@ -136,6 +139,7 @@ def issue_items(request,pk):
     queryset = Stock.objects.get(id=pk)
     form = IssueForm(request.POST or None, instance = queryset)
     form1 = HistoryIssueForm(request.POST or None)
+    categories = Category.objects.filter(parent_cat=None)
     
     if form.is_valid() and form1.is_valid:
         form1.instance.item_name = form.instance.item_name
@@ -152,6 +156,7 @@ def issue_items(request,pk):
     context = {
         'title': 'Götürülən avadanlıq: ' + str(queryset.item_name),
         'queryset': queryset,
+        'categories': categories,
         'form' : form,
         'form' : form1, 
         'username': 'Issue By: ' + str(request.user),
@@ -164,6 +169,7 @@ def receive_items(request,pk):
     queryset = Stock.objects.get(id=pk)
     form = ReceiveForm(request.POST or None, instance = queryset)
     form1 = HistoryReceiveForm(request.POST or None)
+    categories = Category.objects.filter(parent_cat=None)
     
     if form.is_valid() and form1.is_valid:
         instance = form.save(commit=False)
@@ -182,6 +188,7 @@ def receive_items(request,pk):
     context = {
         'title': 'Əlavə edilən avadanlıq: ' + str(queryset.item_name),
         'queryset': queryset,
+        'categories': categories,
         'form' : form,
         'form' : form1, 
         'username': 'Recieved By: ' + str(request.user),
@@ -215,6 +222,8 @@ def list_history(request):
     categories = Category.objects.filter(parent_cat=None)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    category = form['category'].value()
+    user = form['user'].value()
     context = {
         'header': header,
         # 'queryset': queryset,
@@ -224,35 +233,29 @@ def list_history(request):
     }
 
     if request.method == 'POST':
-        category = form['category'].value()
-        user = form['user'].value()
-        queryset = StockHistory.objects.filter(
-            item_name__icontains = form['item_name'].value(),
-            # last_updated__range = {
-            #     form['start_date'].value(),
-            #     form['end_date'].value()
-            # }
-        )
+        page_obj = StockHistory.objects.filter(
+                                        item_name__icontains=form['item_name'].value())
 
         if (category != ''):
-            queryset = queryset.filter(category_id=category)
+            page_obj = page_obj.filter(category_id=category)
         
         if (user != ''):
-            queryset = queryset.filter(user_id=user)
+            page_obj = page_obj.filter(user_id=user)
 
         if form['export_to_CSV'].value() == True:
             response = HttpResponse(content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename="List of stock.csv"'
             writer = csv.writer(response)
-            writer.writerow(['CATEGORY','ITEM NAME','QUANTITY_IN_STORE','RECEIVE','ISSUE','DESCRIPTION','LAST_UPDATE'])
-            instance = queryset
+            writer.writerow(['User','CATEGORY','ITEM NAME','QUANTITY_IN_STORE','RECEIVE','ISSUE','DESCRIPTION','LAST_UPDATE'])
+            instance = page_obj
             for stock in instance:
-                writer.writerow([stock.category,stock.item_name,stock.quantity,stock.receive_quantity,stock.issue_quantity,stock.description,stock.last_updated])
+                writer.writerow([stock.user,stock.category,stock.item_name,stock.quantity,stock.receive_quantity,stock.issue_quantity,stock.description,stock.last_updated])
             return response
-
+       
         context = {
         'header': header,
-        'queryset': queryset,
+        # 'queryset': queryset,
+        'page_obj': page_obj,
         'form': form,
         'categories' : categories,
         }

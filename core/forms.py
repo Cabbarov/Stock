@@ -68,7 +68,8 @@ class StockHistorySearchForm(forms.ModelForm):
         labels = {
             'user': 'İstifadəçi:',
             'category': "Kateqoriya:",
-            'item_name': "Avadanlığın adı:"
+            'item_name': "Avadanlığın adı:",
+            'export_to_CSV': 'CSV',
         }
 
 

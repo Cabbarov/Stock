@@ -8,7 +8,8 @@ __pycache__/
 
 # C extensions
 *.so
-pgdb/
+pgdb
+
 media/
 # Distribution / packaging
 .Python
@@ -108,7 +109,7 @@ celerybeat.pid
 
 # Environments
 .env
-.env/
+env/
 **/.env
 .venv
 env/

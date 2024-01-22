@@ -43,21 +43,23 @@ thead tr{
     {% endif %}
     <div class="jumbotron m-3 p-2" style="background-color: #b7c3d1;">
         <h1 style="text-align: center;">{{title}}</h1>
-        <div class="ms-4">
+        <div class="ms-4 ">
 
             <a href="{% url 'issue_items' queryset.id %}"><div class="btn btn-danger">GÖTÜR</div></a>
             <a href="{% url 'receive_items' queryset.id %}"><div class="btn btn-primary">ƏLAVƏ ET</div></a>
         </div>
         <table class="table">
             <tr>
-                
+                <th>Kateqoriya</th>
+                <th>ALTKATEQORİYA</th>
                 <th>AVADANLIĞIN ADI</th>
                 <th>ANBARDAKI SAYI</th>
                 <th>SON DƏYİŞİKLİK TARİXİ</th>
                 <!-- <th>REORDER LEVEL</th> -->
             </tr>
             <tr>
-                
+                <td>{{queryset.category.parent_cat}}</td>
+                <td>{{queryset.category.name}}</td>
                 <td>{{queryset.item_name}}</td>
                 <td>{{queryset.quantity}}</td>
                 <td>{{queryset.last_updated}}</td>
