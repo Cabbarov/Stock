@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login,logout
 from django.core.paginator import Paginator
+from django.forms import widgets
 
 def index(request):
     device = Stock.objects.all()
@@ -35,9 +36,7 @@ def list_items(request):
     form = StockSearchForm(request.POST or None)
     queryset = Stock.objects.all()
     category = form['category'].value()
-
     categories = Category.objects.filter(parent_cat=None)
-
     context = {
         'form'  : form,
         'title' : title,
@@ -216,7 +215,7 @@ def reorder_level(request,pk):
 @login_required
 def list_history(request):
     header = 'Tarixçə'
-    queryset = StockHistory.objects.all()
+    queryset = StockHistory.objects.all().order_by('-last_updated')
     paginator = Paginator(queryset,10)
     form = StockHistorySearchForm(request.POST or None)
     categories = Category.objects.filter(parent_cat=None)

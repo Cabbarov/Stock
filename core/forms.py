@@ -38,6 +38,9 @@ class StockCreateForm(forms.ModelForm):
     #     return item_name
 
 class HistoryStockCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.filter(parent_cat=True)
     class Meta:
         model = StockHistory
         fields = ['category', 'item_name', 'quantity'] 
@@ -123,6 +126,9 @@ class ReorderLevelForm(forms.ModelForm):
 
 
 class CategoryForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.fields['parent_cat'].queryset = Category.objects.filter(parent_cat=None)
     class Meta:
         model = Category
         fields= ['parent_cat','name']
@@ -130,7 +136,3 @@ class CategoryForm(forms.ModelForm):
             'parent_cat': 'Kateqoriya',
             'name': 'Altkateqoriya'
         }
-        widgets = {
-
-        }
-
